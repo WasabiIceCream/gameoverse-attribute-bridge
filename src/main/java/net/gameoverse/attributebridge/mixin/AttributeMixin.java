@@ -18,6 +18,6 @@ public class AttributeMixin {
     @Inject(method = "getDescriptionId", at = @At("HEAD"), cancellable = true)
     private void bridge_name(CallbackInfoReturnable<String> cir) {
         AttributeBridge.Link link = AttributeBridge.get((Attribute) (Object) this);
-        if (link != null) cir.setReturnValue(link.target().value().getDescriptionId());
+        if (link != null) cir.setReturnValue(link.primary().value().getDescriptionId());
     }
 }

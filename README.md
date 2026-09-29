@@ -28,6 +28,17 @@ total and one roll:
   (animation, sound, EVASION triggers) and drop Apothic's own dodge sound.
 - Client: declares every Apothic percentage attribute to Dynamic Tooltips, which draws item stat lines itself.
 
+## Pufferfish's Attributes (1.1.0)
+
+Links are per operation: each modifier operation of a source has its own routes (target attribute, operation, scale),
+and an operation with no route is dropped. Pufferfish's attributes have no base value (they read as NaN) and their
+`add_value` is a flat amount, so only exact flat equivalents are kept (mining speed -> Mining Efficiency, knockback ->
+Attack Knockback, fall reduction -> Safe Fall Distance, armor/protection shred's flat part -> Armor/Protection Pierce);
+their percentages go to the Apothic, vanilla, Artifacts or Enderscape equivalent (healing, life steal, ranged damage,
+experience, breaking speed, bow/crossbow projectile speed, sprinting/mount/consuming speed, stealth, jump, armor and
+protection shred). Its unique attributes are left alone. Targets from optional mods are skipped when the mod is absent.
+See `docs/skill-forest-design.md` for the full table.
+
 ## Better Combat
 
 - `BetterCombatHandSwapMixin`: Better Combat's off-hand swing swapped the weapons' stats from their

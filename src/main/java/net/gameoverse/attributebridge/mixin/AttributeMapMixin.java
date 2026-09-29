@@ -1,5 +1,6 @@
 package net.gameoverse.attributebridge.mixin;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.spongepowered.asm.mixin.Final;
@@ -40,6 +41,7 @@ public abstract class AttributeMapMixin {
 
     @Inject(method = "getInstance", at = @At("HEAD"), cancellable = true)
     private void bridge_getInstance(Holder<Attribute> attribute, CallbackInfoReturnable<AttributeInstance> cir) {
+        AttributeBridge.init();
         AttributeBridge.Link link = AttributeBridge.get(attribute);
         if (link == null) return;
         AttributeInstance existing = this.attributes.get(attribute);
@@ -48,10 +50,14 @@ public abstract class AttributeMapMixin {
             return;
         }
         if (!this.supplier.hasAttribute(attribute)) return;
-        AttributeInstance target = this.getInstance(link.target());
-        if (target == null) return;
+        Map<Holder<Attribute>, AttributeInstance> targets = new HashMap<>();
+        for (Holder<Attribute> target : link.targets()) {
+            AttributeInstance instance = this.getInstance(target);
+            if (instance != null) targets.put(target, instance);
+        }
+        if (!targets.containsKey(link.primary())) return;
 
-        BridgedAttributeInstance bridged = new BridgedAttributeInstance(link, target, this.supplier.getBaseValue(attribute));
+        BridgedAttributeInstance bridged = new BridgedAttributeInstance(link, targets, this.supplier.getBaseValue(attribute));
         if (existing != null) {
             // Created before the bridge was ready (not expected): carry its modifiers over.
             for (AttributeModifier modifier : existing.getModifiers()) {

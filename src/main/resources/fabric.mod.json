@@ -33,6 +33,7 @@
     "ranged_weapon_api": "*"
   },
   "suggests": {
-    "dynamictooltips": "*"
+    "dynamictooltips": "*",
+    "puffish_attributes": "*"
   }
 }
