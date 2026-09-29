@@ -42,7 +42,7 @@ total and one roll:
 ## Build
 
 Compiles against the installed jars in `reference-jars/` (not committed): Apothic Attributes (Fabric port
-3.0.1-fabric.4+), Critical Strike, Spell Engine, Spell Power, Ranged Weapon API, Dynamic Tooltips, Better Combat. `./gradlew build`.
+3.0.1-fabric.5+), Critical Strike, Spell Engine, Spell Power, Ranged Weapon API, Dynamic Tooltips, Better Combat. `./gradlew build`.
 
 Tested in game 2026-09-28: tooltips, combined totals, a fist crit at 101% chance dealt exactly 1 x 1.66, a 100% dodge
 took no damage, Ranged Weapon API read Apothic's Draw Speed.
