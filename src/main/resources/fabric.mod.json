@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "gameoverse_attribute_bridge",
+  "version": "${version}",
+
+  "name": "Gameoverse Attribute Bridge",
+  "description": "Makes Apothic Attributes' crit, dodge, draw speed and healing stats the single version: Critical Strike's crit chance and damage, Spell Engine's evasion and healing taken, and Ranged Weapon API's draw speed are stored and shown as their Apothic counterparts, and one roll uses them all.",
+  "authors": [
+    "WasabiIceCream"
+  ],
+
+  "license": "MIT",
+
+  "environment": "*",
+  "mixins": [
+    "gameoverse_attribute_bridge.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.19.5",
+    "fabric-api": "*",
+    "minecraft": ">=26.1",
+    "java": ">=25",
+    "apothic_attributes": ">=3.0.1-fabric.4",
+    "critical_strike": "*",
+    "spell_engine": "*",
+    "spell_power": "*",
+    "ranged_weapon_api": "*"
+  }
+}
