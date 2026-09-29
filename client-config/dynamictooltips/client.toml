@@ -1,0 +1,87 @@
+# Don't change this! Version used to track needed updates.
+version = 0
+# Append Block Interaction Range attribute line to relevant tooltips (pickaxes, shovels, etc.)
+appendBlockInteractionRangeTooltip = true
+# Items or tags that should display Block Interaction Range tooltips.
+# Format: \"namespace:path\" for item IDs, or \"#namespace:path\" for tags.
+# Default includes common mining tools (pickaxes, axes, shovels, hoes, shears).
+blockInteractionRangeItemTags = [
+    "#minecraft:enchantable/mining"
+]
+# Append Entity Interaction Range attribute line to relevant tooltips (swords, etc.)
+appendEntityInteractionRangeTooltip = false
+# Items or tags that should display Entity Interaction Range tooltips.
+# Format: \"namespace:path\" for item IDs, or \"#namespace:path\" for tags.
+# Default includes weapon-related enchantable tags.
+entityInteractionRangeItemTags = [
+    "#minecraft:enchantable/weapon",
+    "#minecraft:enchantable/trident",
+    "#minecraft:enchantable/fire_aspect",
+    "#minecraft:enchantable/sharp_weapon"
+]
+# Append a merged Mining Speed line to mining tool tooltips (tool material speed + Mining Efficiency).
+appendMiningSpeedTooltip = true
+# Items or tags that should display the Mining Speed tooltip.
+# Format: \"namespace:path\" for item IDs, or \"#namespace:path\" for tags.
+# Default matches the same tag used by Block Interaction Range (pickaxes, axes, shovels, hoes).
+miningSpeedItemTags = [
+    "#minecraft:enchantable/mining"
+]
+# Show the 'Hold [Shift] to expand...' hint in tooltips that have merged attributes or collapsed enchantments.
+showUsabilityHint = false
+# Collapse enchantment descriptions on gear, requiring Shift to be held to view them.
+# Enchanted Books always show descriptions.
+collapseEnchantmentTooltipsOnGear = true
+# Enable custom coloring of enchantments in tooltips.
+colorEnchantmentNames = true
+# Hex color code (#RRGGBB) for regular enchantment names (if colorEnchantmentNames is true). Curses are always red.
+enchantmentNameColor = "#AAAAAA"
+# Hex color code (#RRGGBB) for enchantment description text.
+enchantmentDescriptionColor = "#808080"
+# Hex color code (#RRGGBB) for enchantments above their max level (excluding curses) if colorEnchantmentNames is true.
+superLeveledEnchantmentColor = "#FF55FF"
+# Custom color rules for specific attributes in tooltips.
+# Format: \"attribute_id:LOGIC[:#HEXCOLOR]\"
+#   attribute_id: identifier (e.g. minecraft:generic.movement_speed)
+#   LOGIC: INVERTED (flip default sentiment coloring) or FIXED (always use #HEXCOLOR)
+#   :#HEXCOLOR: required for FIXED
+# Unspecified attributes use vanilla coloring.
+attributeColorOverrides = [
+    "additionalentityattributes:generic.hitbox_height:FIXED:#808080",
+    "additionalentityattributes:generic.hitbox_width:FIXED:#808080",
+    "additionalentityattributes:generic.model_height:FIXED:#808080",
+    "additionalentityattributes:generic.model_width:FIXED:#808080",
+    "additionalentityattributes:generic.height:FIXED:#808080",
+    "additionalentityattributes:generic.width:FIXED:#808080",
+    "additionalentityattributes:generic.model_scale:FIXED:#808080",
+    "additionalentityattributes:generic.mob_detection_range:INVERTED",
+    "ranged_weapon:pull_time:INVERTED"
+]
+# Attributes whose flat (ADD_VALUE) modifiers should be rendered as percentages.
+# Format: \"attribute_id[:scaleFactor]\" (default scale = 100)
+#   attribute_id: identifier (e.g. minecraft:knockback_resistance)
+#   scaleFactor: multiplier applied to the raw value before the % sign (e.g. 100 means 0.1 -> 10%).
+# Mods can also register percent attributes via DynamicTooltipsAPI; this list overrides any API entries on conflict.
+percentAttributes = [
+    "minecraft:knockback_resistance:100"
+]
+# Attributes whose modifiers should be merged with the item's base modifier (rendered green/gold).
+# Format: \"attribute_id\"
+# Pair each with an entry in baseModifierMappings to teach the handler which modifier ID is the base.
+# Mods can also register base attributes via DynamicTooltipsAPI; this list overrides any API entries on conflict.
+baseAttributes = [
+    "minecraft:attack_damage",
+    "minecraft:attack_speed",
+    "minecraft:entity_interaction_range",
+    "ranged_weapon:damage",
+    "ranged_weapon:pull_time"
+]
+# Mapping from attribute ID to the modifier ID that represents its base value (used for merge rendering).
+# Format: \"attribute_id=base_modifier_id\"
+# Mods can also register mappings via DynamicTooltipsAPI; this list overrides any API entries on conflict.
+baseModifierMappings = [
+    "minecraft:attack_damage=minecraft:base_attack_damage",
+    "minecraft:attack_speed=minecraft:base_attack_speed",
+    "ranged_weapon:damage=ranged_weapon:base_damage",
+    "ranged_weapon:pull_time=ranged_weapon:base_pull_time"
+]

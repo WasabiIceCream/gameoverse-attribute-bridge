@@ -28,10 +28,21 @@ total and one roll:
   (animation, sound, EVASION triggers) and drop Apothic's own dodge sound.
 - Client: declares every Apothic percentage attribute to Dynamic Tooltips, which draws item stat lines itself.
 
+## Better Combat
+
+- `BetterCombatHandSwapMixin`: Better Combat's off-hand swing swapped the weapons' stats from their
+  `attribute_modifiers` component only, so Apotheosis affixes, material traits and enchantment attribute effects
+  stayed on the main-hand weapon. It now swaps each weapon's full per-slot modifiers (`ItemStack#forEachModifier`).
+- `ApothicEventsMixin`: a player's melee hit can be dodged within their Better Combat weapon reach (Better Combat's
+  own server range check), not only within Entity Interaction Range.
+- `client-config/dynamictooltips/client.toml` is the source of truth for the copy AutoModpack sends to players
+  (`host-modpack/main/config/dynamictooltips/`, force-synced by an `allowEditsInFiles` exception): Dynamic Tooltips'
+  Entity Interaction Range line is off, since Better Combat's Attack Range line shows the real reach.
+
 ## Build
 
 Compiles against the installed jars in `reference-jars/` (not committed): Apothic Attributes (Fabric port
-3.0.1-fabric.4+), Critical Strike, Spell Engine, Spell Power, Ranged Weapon API, Dynamic Tooltips. `./gradlew build`.
+3.0.1-fabric.4+), Critical Strike, Spell Engine, Spell Power, Ranged Weapon API, Dynamic Tooltips, Better Combat. `./gradlew build`.
 
 Tested in game 2026-09-28: tooltips, combined totals, a fist crit at 101% chance dealt exactly 1 x 1.66, a 100% dodge
 took no damage, Ranged Weapon API read Apothic's Draw Speed.

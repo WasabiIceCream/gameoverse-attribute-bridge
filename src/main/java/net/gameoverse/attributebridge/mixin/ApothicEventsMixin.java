@@ -9,13 +9,19 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 
+import net.bettercombat.BetterCombatMod;
+import net.bettercombat.logic.PlayerAttackHelper;
 import net.critical_strike.api.CriticalDamageSource;
 import net.gameoverse.attributebridge.SpellDamage;
+import net.minecraft.core.Holder;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUseAnimation;
@@ -32,6 +38,8 @@ import net.spell_engine.api.entity.EvasionLogic;
  * sound is dropped, its smoke stays).</li>
  * <li>Bows and crossbows are drawn faster by Ranged Weapon API's hook, which reads the combined Draw Speed; Apothic's
  * own hook only handles the rest (tridents).</li>
+ * <li>A player's melee hit can be dodged within their Better Combat weapon reach (as far as Better Combat's own server
+ * check accepts a target), which can exceed Entity Interaction Range.</li>
  * </ul>
  */
 @Mixin(targets = "dev.shadowsoffire.apothic_attributes.impl.AttributeEvents")
@@ -66,6 +74,13 @@ public class ApothicEventsMixin {
 
     @WrapOperation(method = "onDodge", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;playSound(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/sounds/SoundEvent;Lnet/minecraft/sounds/SoundSource;FF)V"))
     private static void bridge_noDodgeSound(Level level, Entity player, Entity source, SoundEvent sound, SoundSource category, float volume, float pitch, Operation<Void> original) {}
+
+    @WrapOperation(method = "dodge", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;getAttributeValue(Lnet/minecraft/core/Holder;)D"))
+    private static double bridge_weaponReach(Player player, Holder<Attribute> attribute, Operation<Double> original) {
+        if (attribute != Attributes.ENTITY_INTERACTION_RANGE) return original.call(player, attribute);
+        double range = PlayerAttackHelper.getRangeForItem(player, player.getMainHandItem());
+        return Math.max(original.call(player, attribute), range * Math.sqrt(BetterCombatMod.config.target_search_range_multiplier));
+    }
 
     @Inject(method = "drawSpeed", at = @At("HEAD"), cancellable = true)
     private static void bridge_bowsByRangedWeaponApi(LivingEntity entity, ItemStack item, int duration, CallbackInfoReturnable<Integer> cir) {

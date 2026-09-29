@@ -18,12 +18,13 @@ dependencies {
     // The mods this bridges, compiled against the installed jars (reference-jars/, not committed) and
     // provided at runtime by those same mods.
     compileOnly(files(
-        "reference-jars/apothic-attributes-fabric-3.0.1-fabric.4.jar",
+        "reference-jars/apothic-attributes-fabric-3.0.1-fabric.5.jar",
         "reference-jars/critical_strike-fabric-1.0.6+26.1.2.jar",
         "reference-jars/spell_engine-fabric-1.10.5+26.1.2.jar",
         "reference-jars/spell_power-fabric-1.6.2+26.1.2.jar",
         "reference-jars/ranged_weapon_api-fabric-4.0.0+26.1.2.jar",
-        "reference-jars/dynamic-tooltips-1.0.2+26.1.2.jar"
+        "reference-jars/dynamic-tooltips-1.0.2+26.1.2.jar",
+        "reference-jars/bettercombat-fabric-3.2.2+26.1.2.jar"
     ))
 }
 

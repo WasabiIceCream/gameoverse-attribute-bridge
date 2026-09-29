@@ -7,6 +7,7 @@
     "ApothicEventsMixin",
     "AttributeMapMixin",
     "AttributeMixin",
+    "BetterCombatHandSwapMixin",
     "CritLogicMixin",
     "SpellImpactsMixin"
   ],
