@@ -12,6 +12,11 @@
   "license": "MIT",
 
   "environment": "*",
+  "entrypoints": {
+    "client": [
+      "net.gameoverse.attributebridge.client.AttributeBridgeClient"
+    ]
+  },
   "mixins": [
     "gameoverse_attribute_bridge.mixins.json"
   ],
@@ -25,5 +30,8 @@
     "spell_engine": "*",
     "spell_power": "*",
     "ranged_weapon_api": "*"
+  },
+  "suggests": {
+    "dynamictooltips": "*"
   }
 }

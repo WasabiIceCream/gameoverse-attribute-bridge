@@ -22,7 +22,8 @@ dependencies {
         "reference-jars/critical_strike-fabric-1.0.6+26.1.2.jar",
         "reference-jars/spell_engine-fabric-1.10.5+26.1.2.jar",
         "reference-jars/spell_power-fabric-1.6.2+26.1.2.jar",
-        "reference-jars/ranged_weapon_api-fabric-4.0.0+26.1.2.jar"
+        "reference-jars/ranged_weapon_api-fabric-4.0.0+26.1.2.jar",
+        "reference-jars/dynamic-tooltips-1.0.2+26.1.2.jar"
     ))
 }
 
