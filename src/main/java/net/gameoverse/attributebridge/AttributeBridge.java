@@ -11,6 +11,7 @@ import java.util.function.DoubleUnaryOperator;
 import org.jspecify.annotations.Nullable;
 
 import dev.shadowsoffire.apothic_attributes.api.ALObjects;
+import dev.shadowsoffire.apothic_attributes.api.PercentageAttribute;
 import net.critical_strike.api.AttributeIdentifiers;
 import net.critical_strike.api.CriticalStrikeAttributes;
 import net.minecraft.core.Holder;
@@ -107,6 +108,7 @@ public final class AttributeBridge {
         // Ranged Weapon API reads haste as value / 100, a draw speed multiplier like Apothic's.
         percent100(map, EntityAttributes_RangedWeapon.HASTE.entry, ALObjects.Attributes.DRAW_SPEED, t -> 100 * t, null);
         PufferfishLinks.add(map);
+        TooManyBowsLinks.add(map);
         links = map;
     }
 
@@ -119,6 +121,27 @@ public final class AttributeBridge {
         routes.put(Operation.ADD_MULTIPLIED_BASE, List.of(new Route(target, Operation.ADD_VALUE, 1)));
         routes.put(Operation.ADD_MULTIPLIED_TOTAL, List.of(new Route(target, Operation.ADD_MULTIPLIED_TOTAL, 1)));
         map.put(source.value(), new Link(source, routes, mirror, skipId));
+    }
+
+    /**
+     * The modifier as a tooltip should show it: a bridged source's modifier as it applies to the primary target (when
+     * that target is an Apothic percentage attribute, the only case where the source's own formatting can differ), and
+     * an {@code add_value} modifier on a percentage attribute in the percent style Apothic uses (see
+     * {@link PercentageAttribute#forDisplay}). The tooltip keeps the source attribute, which already has the target's
+     * name.
+     */
+    public static AttributeModifier forDisplay(Holder<Attribute> attribute, AttributeModifier modifier) {
+        Link link = get(attribute);
+        if (link != null) {
+            for (Route route : link.routes(modifier)) {
+                if (route.target() == link.primary() && route.target().value() instanceof PercentageAttribute) {
+                    AttributeModifier converted = new AttributeModifier(modifier.id(), modifier.amount() * route.scale(), route.operation());
+                    return PercentageAttribute.forDisplay(route.target(), converted);
+                }
+            }
+            return modifier;
+        }
+        return PercentageAttribute.forDisplay(attribute, modifier);
     }
 
     static Optional<Holder<Attribute>> attribute(String id) {
@@ -198,6 +221,34 @@ public final class AttributeBridge {
 
         static Route t(String target, Operation operation) {
             return new Route(attribute(target).orElse(null), operation, 1);
+        }
+    }
+
+    /**
+     * Too Many Bows (optional): its bow draw speed, bow damage and bow crit chance are Apothic's Draw Speed, Arrow Damage
+     * and Crit Chance, which already apply to its bows (Ranged Weapon API's draw hook, Apothic's arrow hooks). They read
+     * as their base (1, 1, 0), so its own pull-time division, damage multiplier and crit roll do nothing.
+     */
+    private static final class TooManyBowsLinks {
+
+        static void add(Map<Attribute, Link> map) {
+            // Base 1 multipliers on both sides: add_value x and add_multiplied_base x are both +x.
+            multiplier(map, "bow_draw_speed", ALObjects.Attributes.DRAW_SPEED);
+            multiplier(map, "bow_damage", ALObjects.Attributes.ARROW_DAMAGE);
+            // A chance from 0 to 1 with a base of 0, the same scale as Apothic's; a multiplied bonus on 0 does nothing.
+            link(map, "bow_crit_chance", Map.of(Operation.ADD_VALUE, List.of(new Route(ALObjects.Attributes.CRIT_CHANCE, Operation.ADD_VALUE, 1))));
+        }
+
+        static void multiplier(Map<Attribute, Link> map, String source, Holder<Attribute> target) {
+            Map<Operation, List<Route>> routes = new EnumMap<>(Operation.class);
+            routes.put(Operation.ADD_VALUE, List.of(new Route(target, Operation.ADD_VALUE, 1)));
+            routes.put(Operation.ADD_MULTIPLIED_BASE, List.of(new Route(target, Operation.ADD_VALUE, 1)));
+            routes.put(Operation.ADD_MULTIPLIED_TOTAL, List.of(new Route(target, Operation.ADD_MULTIPLIED_TOTAL, 1)));
+            link(map, source, routes);
+        }
+
+        static void link(Map<Attribute, Link> map, String source, Map<Operation, List<Route>> routes) {
+            attribute("too_many_bows:" + source).ifPresent(src -> map.put(src.value(), new Link(src, new EnumMap<>(routes), null, null)));
         }
     }
 }

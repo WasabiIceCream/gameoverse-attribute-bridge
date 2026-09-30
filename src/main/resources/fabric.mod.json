@@ -34,6 +34,8 @@
   },
   "suggests": {
     "dynamictooltips": "*",
-    "puffish_attributes": "*"
+    "puffish_attributes": "*",
+    "too_many_bows": "*",
+    "trinkets": "*"
   }
 }

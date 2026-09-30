@@ -6,6 +6,7 @@
   "mixins": [
     "ApothicEventsMixin",
     "AttributeMapMixin",
+    "AttributeTooltipMixin",
     "AttributeMixin",
     "BetterCombatHandSwapMixin",
     "CritLogicMixin",
@@ -13,5 +14,8 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "client": [
+    "TrinketsTooltipMixin"
+  ]
 }

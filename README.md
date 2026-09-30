@@ -39,6 +39,31 @@ experience, breaking speed, bow/crossbow projectile speed, sprinting/mount/consu
 protection shred). Its unique attributes are left alone. Targets from optional mods are skipped when the mod is absent.
 See `docs/skill-forest-design.md` for the full table.
 
+## Too Many Bows (1.1.1)
+
+| Too Many Bows attribute | Becomes |
+|---|---|
+| `too_many_bows:bow_draw_speed` | `apothic_attributes:draw_speed` |
+| `too_many_bows:bow_damage` | `apothic_attributes:arrow_damage` |
+| `too_many_bows:bow_crit_chance` | `apothic_attributes:crit_chance` |
+
+Its bows are ordinary bows to the rest of the game, so Apothic's Draw Speed (through Ranged Weapon API's draw hook),
+Arrow Damage and Crit Chance already applied to them, and its own attributes stacked on top: draw speed divided the pull
+time a second time, bow damage multiplied the arrow's damage a second time, and bow crit chance was a separate crit
+roll. The three now read as their base (1, 1, 0), so that code does nothing, and their modifiers go to the Apothic
+stat. Draw speed and damage are base-1 multipliers on both sides, so `add_value` and `add_multiplied_base` x are both
++x (`add_multiplied_total` stays); bow crit chance is a 0 to 1 chance like Apothic's, so only its `add_value` carries
+over. Skipped when Too Many Bows is absent.
+
+Side effects: its trinkets (Draw Speed Glove, Sharpshot Ring, Stormbound Signet, Dead Eye's Pendant) and the Cursed
+Flame Bow's sigil bonus become general stats: draw speed for every bow, crossbow and trident, arrow damage for every
+arrow, and the pendant's crit chance for every attack, melee included.
+
+Tooltips: `AttributeTooltipMixin` (items) and `TrinketsTooltipMixin` (Trinkets' own stat lines, which format
+`add_value` as a plain number) show a bridged modifier as it applies to its Apothic target, in Apothic's percent style:
+the pendant reads "+8% Crit Chance", the glove "+75% Draw Speed". Apothic percentage attributes on any trinket read as
+percentages too.
+
 ## Better Combat
 
 - `BetterCombatHandSwapMixin`: Better Combat's off-hand swing swapped the weapons' stats from their
