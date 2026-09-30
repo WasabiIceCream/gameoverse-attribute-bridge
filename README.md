@@ -27,6 +27,9 @@ total and one roll:
   Critical Strike crit, for Spell Engine's "critical" triggers; Apothic dodges call Spell Engine's `onEvade`
   (animation, sound, EVASION triggers) and drop Apothic's own dodge sound.
 - Client: declares every Apothic percentage attribute to Dynamic Tooltips, which draws item stat lines itself.
+- Client: hides bridged source attributes (Critical Strike Chance, Evasion, Bow Crit Chance and the rest) from
+  Apothic's Attributes GUI (the inventory panel), where they would repeat their Apothic target. Uses
+  `AttributesGui.addHiddenFilter`, new in Apothic 3.0.1-fabric.6; with an older Apothic it does nothing.
 
 ## Pufferfish's Attributes (1.1.0)
 
@@ -78,7 +81,7 @@ percentages too.
 ## Build
 
 Compiles against the installed jars in `reference-jars/` (not committed): Apothic Attributes (Fabric port
-3.0.1-fabric.5+), Critical Strike, Spell Engine, Spell Power, Ranged Weapon API, Dynamic Tooltips, Better Combat. `./gradlew build`.
+3.0.1-fabric.6; runs on fabric.5+), Critical Strike, Spell Engine, Spell Power, Ranged Weapon API, Dynamic Tooltips, Better Combat. `./gradlew build`.
 
 Tested in game 2026-09-28: tooltips, combined totals, a fist crit at 101% chance dealt exactly 1 x 1.66, a 100% dodge
 took no damage, Ranged Weapon API read Apothic's Draw Speed.
